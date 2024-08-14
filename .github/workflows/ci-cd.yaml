@@ -10,7 +10,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      SAM_TEMPLATE: "template.yaml"
+      SAM_TEMPLATE: "./infrastructure/cloudformation/template.yaml"
       STACK_NAME: "factored-datathon-2024-unlock"
       BUCKET_NAME: "aws-sam-cli-aidetractors-738012852934"
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
