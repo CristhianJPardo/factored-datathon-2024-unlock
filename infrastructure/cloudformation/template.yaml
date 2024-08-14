@@ -1,0 +1,48 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: >-
+  SAM Template to create a Lambda Function and an S3 Bucket with a custom resource prefix
+
+Parameters:
+  ResourcePrefix:
+    Type: String
+    Default: "factored-hackaton-2024-unlock"
+    Description: Prefix for the resource names
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Handler: app.lambda_handler
+    Architectures:
+    - arm64
+
+Resources:
+  # Definition of the Lambda Function
+  DownloaderLambda:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: index.handler
+      Runtime: python3.12
+      CodeUri: ./data-engineering/raw/downloader/
+      MemorySize: 128
+      Timeout: 30
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref RawData
+      FunctionName: !Sub '${ResourcePrefix}-downloader-lambda'
+
+  # Definition of the S3 Bucket
+  RawData:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Sub '${ResourcePrefix}-rawdata-bucket'
+      AccessControl: Private
+
+Outputs:
+  LambdaFunctionName:
+    Description: Name of the Lambda Function
+    Value: !Ref DownloaderLambda
+
+  S3BucketName:
+    Description: Name of the S3 Bucket
+    Value: !Ref RawData
