@@ -23,7 +23,7 @@ Resources:
     Properties:
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ../data-engineering/raw/downloader/
+      CodeUri: ./data-engineering/raw/downloader/
       MemorySize: 128
       Timeout: 30
       Environment:
