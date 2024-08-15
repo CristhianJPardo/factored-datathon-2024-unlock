@@ -97,7 +97,7 @@ Resources:
   ArtifactsBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: !Sub '${ResourcePrefix}-medallion-bucket'
+      BucketName: !Sub '${ResourcePrefix}-artifacts-bucket'
 
   # Definition of the DynamoDB table for metadata
   MetadataTable:
