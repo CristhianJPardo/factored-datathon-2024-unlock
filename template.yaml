@@ -23,7 +23,6 @@ Resources:
   DownloaderLambda:
     Type: 'AWS::Serverless::Function'
     Properties:
-      Handler: index.handler
       Runtime: python3.12
       CodeUri: ./data-engineering/raw/downloader/
       MemorySize: 128
@@ -43,7 +42,6 @@ Resources:
   ZipProcessorLambda:
     Type: 'AWS::Serverless::Function'
     Properties:
-      Handler: zip_processor.handler
       Runtime: python3.12
       CodeUri: ./data-engineering/raw/zip_processor/
       MemorySize: 256
