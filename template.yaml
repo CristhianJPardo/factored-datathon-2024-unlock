@@ -69,9 +69,9 @@ Resources:
       FunctionName: !Sub '${ResourcePrefix}-zip-processor-lambda'
       Policies:
         - S3ReadPolicy:
-            BucketName: !Ref RawData
+            BucketName: !Sub '${ResourcePrefix}-rawdata-bucket'
         - S3WritePolicy:
-            BucketName: !Ref ProcessedDataBucket
+            BucketName: !Sub '${ResourcePrefix}-processeddata-bucket'
 
   # Definition of the S3 Bucket for processed data
   ProcessedDataBucket:
