@@ -1,7 +1,8 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: >-
-  SAM Template to create a Lambda Function and an S3 Bucket with a custom resource prefix
+  SAM Template to create a Lambda Function, an S3 Bucket with a custom resource prefix, 
+  a DynamoDB table, and an additional Lambda for processing ZIP files.
 
 Parameters:
   ResourcePrefix:
@@ -15,9 +16,10 @@ Globals:
     Handler: app.lambda_handler
     Architectures:
     - arm64
+    Timeout: 60
 
 Resources:
-  # Definition of the Lambda Function
+  # Definition of the Lambda Function for downloading and storing metadata
   DownloaderLambda:
     Type: 'AWS::Serverless::Function'
     Properties:
@@ -28,21 +30,95 @@ Resources:
       Timeout: 30
       Environment:
         Variables:
-          BUCKET_NAME: !Ref RawData
+          BUCKET_NAME: !Sub '${ResourcePrefix}-rawdata-bucket'
+          DYNAMO_TABLE_NAME: !Ref MetadataTable
       FunctionName: !Sub '${ResourcePrefix}-downloader-lambda'
+      Policies:
+        - S3WritePolicy:
+            BucketName: !Sub '${ResourcePrefix}-rawdata-bucket'
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MetadataTable
 
-  # Definition of the S3 Bucket
+  # Definition of the S3 Bucket for raw data
   RawData:
     Type: 'AWS::S3::Bucket'
+    DependsOn: ZipProcessorLambda
     Properties:
       BucketName: !Sub '${ResourcePrefix}-rawdata-bucket'
-      AccessControl: Private
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: 's3:ObjectCreated:Put'
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: suffix
+                    Value: '.zip'
+            Function: !GetAtt ZipProcessorLambda.Arn
+
+  # Permission for S3 to invoke the ZipProcessorLambda
+  ZipProcessorPermission:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      FunctionName: !Ref ZipProcessorLambda
+      Action: 'lambda:InvokeFunction'
+      Principal: 's3.amazonaws.com'
+      SourceArn: !GetAtt RawData.Arn
+
+  # Definition of the Lambda Function for processing ZIP files
+  ZipProcessorLambda:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: zip_processor.handler
+      Runtime: python3.12
+      CodeUri: ./data-engineering/raw/zip_processor/
+      MemorySize: 256
+      Timeout: 60
+      Environment:
+        Variables:
+          DESTINATION_BUCKET_NAME: !Sub '${ResourcePrefix}-processeddata-bucket'
+      FunctionName: !Sub '${ResourcePrefix}-zip-processor-lambda'
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Sub '${ResourcePrefix}-rawdata-bucket'
+        - S3WritePolicy:
+            BucketName: !Sub '${ResourcePrefix}-processeddata-bucket'
+
+  # Definition of the S3 Bucket for processed data
+  ProcessedDataBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Sub '${ResourcePrefix}-processeddata-bucket'
+
+  # Definition of the DynamoDB table for metadata
+  MetadataTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: !Sub '${ResourcePrefix}-metadata-table'
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
 
 Outputs:
   LambdaFunctionName:
-    Description: Name of the Lambda Function
+    Description: Name of the Downloader Lambda Function
     Value: !Ref DownloaderLambda
 
   S3BucketName:
-    Description: Name of the S3 Bucket
+    Description: Name of the Raw Data S3 Bucket
     Value: !Ref RawData
+
+  ZipProcessorLambdaFunctionName:
+    Description: Name of the Zip Processor Lambda Function
+    Value: !Ref ZipProcessorLambda
+
+  ProcessedDataBucketName:
+    Description: Name of the Processed Data S3 Bucket
+    Value: !Ref ProcessedDataBucket
+
+  MetadataTableName:
+    Description: Name of the DynamoDB Metadata Table
+    Value: !Ref MetadataTable
