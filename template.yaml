@@ -50,13 +50,13 @@ Resources:
       Timeout: 60
       Environment:
         Variables:
-          DESTINATION_BUCKET_NAME: !Sub '${ResourcePrefix}-processeddata-bucket'
+          DESTINATION_BUCKET_NAME: !Sub '${ResourcePrefix}-unzipped-bucket'
       FunctionName: !Sub '${ResourcePrefix}-zip-processor-lambda'
       Policies:
         - S3ReadPolicy:
             BucketName: !Sub '${ResourcePrefix}-rawdata-bucket'
         - S3WritePolicy:
-            BucketName: !Sub '${ResourcePrefix}-processeddata-bucket'
+            BucketName: !Sub '${ResourcePrefix}-unzipped-bucket'
 
   # Permission for S3 to invoke the ZipProcessorLambda
   ZipProcessorPermission:
