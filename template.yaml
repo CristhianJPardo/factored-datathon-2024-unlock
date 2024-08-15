@@ -72,7 +72,7 @@ Resources:
     Type: 'AWS::S3::Bucket'
     DependsOn: ZipProcessorPermission
     Properties:
-      BucketName: !Sub '${ResourcePrefix}-rawdata-bucket'
+      BucketName: !Sub '${ResourcePrefix}-rawd-bucket'
       NotificationConfiguration:
         LambdaConfigurations:
           - Event: 's3:ObjectCreated:Put'
@@ -84,10 +84,20 @@ Resources:
             Function: !GetAtt ZipProcessorLambda.Arn
 
   # Definition of the S3 Bucket for processed data
-  ProcessedDataBucket:
+  UnzippedBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: !Sub '${ResourcePrefix}-processeddata-bucket'
+      BucketName: !Sub '${ResourcePrefix}-unzipped-bucket'
+
+  MedallionBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Sub '${ResourcePrefix}-medallion-bucket'
+
+  ArtifactsBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Sub '${ResourcePrefix}-medallion-bucket'
 
   # Definition of the DynamoDB table for metadata
   MetadataTable:
