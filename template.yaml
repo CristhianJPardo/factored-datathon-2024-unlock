@@ -125,9 +125,9 @@ Outputs:
     Description: Name of the Zip Processor Lambda Function
     Value: !Ref ZipProcessorLambda
 
-  ProcessedDataBucketName:
+  UnzzipedDataBucketName:
     Description: Name of the Processed Data S3 Bucket
-    Value: !Ref ProcessedDataBucket
+    Value: !Ref UnzippedBucket
 
   MetadataTableName:
     Description: Name of the DynamoDB Metadata Table
