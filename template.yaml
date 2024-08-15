@@ -44,7 +44,6 @@ Resources:
     Type: 'AWS::S3::Bucket'
     Properties:
       BucketName: !Sub '${ResourcePrefix}-rawdata-bucket'
-      AccessControl: Private
       NotificationConfiguration:
         LambdaConfigurations:
           - Event: 's3:ObjectCreated:Put'
@@ -79,7 +78,6 @@ Resources:
     Type: 'AWS::S3::Bucket'
     Properties:
       BucketName: !Sub '${ResourcePrefix}-processeddata-bucket'
-      AccessControl: Private
 
   # Definition of the DynamoDB table for metadata
   MetadataTable:
