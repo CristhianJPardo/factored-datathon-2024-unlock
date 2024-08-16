@@ -23,7 +23,8 @@ def get_file_names(formatted_date, event):
     else:
         file_names_default = []
 
-    return file_names_default
+    file_names = event.get("file_names", file_names_default)
+    return file_names
 
 
 def get_formatted_date():
@@ -64,6 +65,7 @@ def lambda_handler(event, context):
     type = event['type']
     formatted_date = get_formatted_date()
     file_names = get_file_names(formatted_date, event)
+    # print(file_names)
     download_upload_files(file_names, type)
     
     return {
