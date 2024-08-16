@@ -62,6 +62,7 @@ def download_upload_files(file_names, type):
 
 
 def lambda_handler(event, context):
+    print(event)
     type = event['type']
     formatted_date = get_formatted_date()
     file_names = get_file_names(formatted_date, event)

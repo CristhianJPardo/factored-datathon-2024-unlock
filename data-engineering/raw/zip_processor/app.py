@@ -7,12 +7,11 @@ s3_client = boto3.client('s3')
 UNZIPPED_BUCKET_NAME = os.environ['UNZIPPED_BUCKET_NAME']
 
 def lambda_handler(event, context):
-    
     print(event)
     raw_bucket = event['Records'][0]['s3']['bucket']['name']
     zip_key = event['Records'][0]['s3']['object']['key']
+    folder = zip_key.split("/")[0]
     
-
     zip_obj = s3_client.get_object(Bucket=raw_bucket, Key=zip_key)
     buffer = io.BytesIO(zip_obj["Body"].read())
     
@@ -22,7 +21,7 @@ def lambda_handler(event, context):
             s3_client.upload_fileobj(
                 extracted_file,
                 UNZIPPED_BUCKET_NAME,
-                file_name
+                f"{folder}/{file_name}"
             )
     
     return {
