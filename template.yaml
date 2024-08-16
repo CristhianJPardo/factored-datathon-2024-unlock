@@ -48,7 +48,7 @@ Resources:
       Timeout: 60
       Environment:
         Variables:
-          DESTINATION_BUCKET_NAME: !Sub '${ResourcePrefix}-unzipped-bucket'
+          UNZIPPED_BUCKET_NAME: !Sub '${ResourcePrefix}-unzipped-bucket'
       FunctionName: !Sub '${ResourcePrefix}-zip-processor-lambda'
       Policies:
         - S3ReadPolicy:
