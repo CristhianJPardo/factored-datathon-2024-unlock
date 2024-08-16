@@ -52,7 +52,7 @@ def download_upload_file(url, key, file_name):
         print(f"Failed to download {file_name} from {url}, error: {e}")
 
 
-def download_upload_files(file_names):
+def download_upload_files(file_names, type):
     for file_name in file_names:
         url = f"http://data.gdeltproject.org/{type}/{file_name}"
         key = f"{type}/{file_name}"
@@ -61,10 +61,10 @@ def download_upload_files(file_names):
 
 
 def lambda_handler(event, context):
-    
+    type = event['type']
     formatted_date = get_formatted_date()
     file_names = get_file_names(formatted_date, event)
-    download_upload_files(file_names)
+    download_upload_files(file_names, type)
     
     return {
         "statusCode": 200
