@@ -29,7 +29,7 @@ Resources:
       Timeout: 30
       Environment:
         Variables:
-          BUCKET_NAME: !Sub '${ResourcePrefix}-rawdata-bucket'
+          RAW_DATA_BUCKET_NAME: !Sub '${ResourcePrefix}-rawdata-bucket'
           DYNAMO_TABLE_NAME: !Ref MetadataTable
       FunctionName: !Sub '${ResourcePrefix}-downloader-lambda'
       Policies:
