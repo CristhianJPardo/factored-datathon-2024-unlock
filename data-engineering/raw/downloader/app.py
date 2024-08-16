@@ -6,11 +6,14 @@ s3_client = boto3.client('s3')
 RAW_DATA_BUCKET_NAME = os.getenv("RAW_DATA_BUCKET_NAME")
 
 def lambda_handler(event, context):
+
     file_name = event['file_name']
     type = event['type']
+
     url = f"http://data.gdeltproject.org/{type}/{file_name}"
     key = f"{type}/{file_name}"
     s3_uri = f"s3://{RAW_DATA_BUCKET_NAME}/{key}"
+    
     try:
         response = requests.get(url)
         try:
@@ -30,5 +33,6 @@ def lambda_handler(event, context):
     return {
         "statusCode": 200,
         "url": url,
-        "s3_uri": s3_uri
+        "s3_uri": s3_uri,
+        "metadata": metadata
     }

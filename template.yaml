@@ -30,13 +30,10 @@ Resources:
       Environment:
         Variables:
           RAW_DATA_BUCKET_NAME: !Sub '${ResourcePrefix}-rawdata-bucket'
-          DYNAMO_TABLE_NAME: !Ref MetadataTable
       FunctionName: !Sub '${ResourcePrefix}-downloader-lambda'
       Policies:
         - S3WritePolicy:
             BucketName: !Sub '${ResourcePrefix}-rawdata-bucket'
-        - DynamoDBCrudPolicy:
-            TableName: !Ref MetadataTable
 
   # Definition of the Lambda Function for processing ZIP files
   ZipProcessorLambda:
@@ -97,19 +94,7 @@ Resources:
     Properties:
       BucketName: !Sub '${ResourcePrefix}-artifacts-bucket'
 
-  # Definition of the DynamoDB table for metadata
-  MetadataTable:
-    Type: 'AWS::DynamoDB::Table'
-    Properties:
-      TableName: !Sub '${ResourcePrefix}-metadata-table'
-      AttributeDefinitions:
-        - AttributeName: id
-          AttributeType: S
-      KeySchema:
-        - AttributeName: id
-          KeyType: HASH
-      BillingMode: PAY_PER_REQUEST
-
+# outputs
 Outputs:
   LambdaFunctionName:
     Description: Name of the Downloader Lambda Function
@@ -126,7 +111,3 @@ Outputs:
   UnzzipedDataBucketName:
     Description: Name of the Processed Data S3 Bucket
     Value: !Ref UnzippedBucket
-
-  MetadataTableName:
-    Description: Name of the DynamoDB Metadata Table
-    Value: !Ref MetadataTable
