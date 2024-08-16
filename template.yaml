@@ -34,6 +34,11 @@ Resources:
       Policies:
         - S3WritePolicy:
             BucketName: !Sub '${ResourcePrefix}-rawdata-bucket'
+      Events:
+        DailySchedule:
+          Type: Schedule
+          Properties:
+            Schedule: cron(30 11 * * ? *)  # 6:30 AM EST (11:30 AM UTC)
       FunctionUrlConfig:
         AuthType: NONE
         Cors:
