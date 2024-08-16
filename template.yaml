@@ -120,4 +120,4 @@ Outputs:
   DownloaderLambdaUrl:
     Description: URL to invoke the Downloader Lambda function
     Value:
-        Fn::GetAtt: DownloaderLambda.FunctionUrl
+        Fn::GetAtt: DownloaderLambdaUrl.FunctionUrl
