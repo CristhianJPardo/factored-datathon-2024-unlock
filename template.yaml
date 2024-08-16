@@ -34,6 +34,11 @@ Resources:
       Policies:
         - S3WritePolicy:
             BucketName: !Sub '${ResourcePrefix}-rawdata-bucket'
+      FunctionUrlConfig:
+        AuthType: NONE
+        Cors:
+            AllowOrigins:
+                - "*"
 
   # Definition of the Lambda Function for processing ZIP files
   ZipProcessorLambda:
