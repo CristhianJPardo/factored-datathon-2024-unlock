@@ -116,3 +116,7 @@ Outputs:
   UnzzipedDataBucketName:
     Description: Name of the Processed Data S3 Bucket
     Value: !Ref UnzippedBucket
+
+  DownloaderLambdaUrl:
+    Description: URL to invoke the Downloader Lambda function
+    Value: !GetAtt DownloaderLambda.FunctionUrl
