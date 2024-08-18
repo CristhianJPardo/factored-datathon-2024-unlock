@@ -1,0 +1,32 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - testing
+    workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      SAM_TEMPLATE: "template.yaml"
+      STACK_NAME: "factored-datathon-2024-unlock"
+      BUCKET_NAME: "aws-sam-cli-aidetractors-738012852934"
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.12
+      - name: Install dependencies
+        run: pip install aws-sam-cli awscli
+      - name: Build SAM
+        run: sam build --template-file $SAM_TEMPLATE --region $AWS_DEFAULT_REGION
+      - name: Package SAM
+        run: sam package --template-file .aws-sam/build/template.yaml --output-template-file packaged.yaml --region $AWS_DEFAULT_REGION --s3-prefix $STACK_NAME --s3-bucket $BUCKET_NAME
+      - name: Deploy SAM
+        run: sam deploy --template-file packaged.yaml --stack-name $STACK_NAME --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND --region $AWS_DEFAULT_REGION
