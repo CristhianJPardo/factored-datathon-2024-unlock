@@ -1,22 +1,34 @@
-// Add import of CheerioCrawler
-import { RequestQueue, CheerioCrawler } from 'crawlee';
+import { CheerioCrawler } from 'crawlee';
+import { URL } from 'node:url';
+import fs from 'fs';
+const data = fs.readFileSync('source_urls.json', 'utf8');
+const urls_list = JSON.parse(data);
 
-const requestQueue = await RequestQueue.open();
-await requestQueue.addRequest({ url: 'https://crawlee.dev' });
 
-// Create the crawler and add the queue with our URL
-// and a request handler to process the page.
 const crawler = new CheerioCrawler({
-    requestQueue,
-    // The `$` argument is the Cheerio object
-    // which contains parsed HTML of the website.
-    async requestHandler({ $, request }) {
-        // Extract <title> text with Cheerio.
-        // See Cheerio documentation for API docs.
+    maxRequestsPerCrawl: 20,
+    async requestHandler({ request, $ }) {
         const title = $('title').text();
         console.log(`The title of "${request.url}" is: ${title}.`);
-    }
-})
 
-// Start the crawler and wait for it to finish
-await crawler.run();
+        const links = $('a[href]')
+            .map((_, el) => $(el).attr('href'))
+            .get();
+
+        // Besides resolving the URLs, we now also need to
+        // grab their hostname for filtering.
+        const { hostname } = new URL(request.loadedUrl);
+        const absoluteUrls = links.map((link) => new URL(link, request.loadedUrl));
+
+        // We use the hostname to filter links that point
+        // to a different domain, even subdomain.
+        const sameHostnameLinks = absoluteUrls
+            .filter((url) => url.hostname === hostname)
+            .map((url) => ({ url: url.href }));
+
+        // Finally, we have to add the URLs to the queue
+        await crawler.addRequests(sameHostnameLinks);
+    },
+});
+
+await crawler.run([...urls_list])
