@@ -1,6 +1,7 @@
 import { CheerioCrawler } from 'crawlee';
 import { URL } from 'node:url';
 import fs from 'fs';
+
 const data = fs.readFileSync('source_urls.json', 'utf8');
 const urls_list = JSON.parse(data);
 
