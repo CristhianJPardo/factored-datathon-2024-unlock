@@ -1,0 +1,16 @@
+{
+  "name": "scraper",
+  "version": "0.0.0.0.1a",
+  "type": "module",
+  "description": "This is the unlock scraper for the factored datathon.",
+  "dependencies": {
+      "crawlee": "^3.0.0",
+      "cherrio": "*",
+  },
+  "scripts": {
+    "start": "node src/main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Unlock",
+  "license": "MIT"
+}
