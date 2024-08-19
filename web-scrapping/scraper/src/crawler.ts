@@ -5,9 +5,10 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs'
 
 
 export const crawler = new CheerioCrawler({
-    async requestHandler({ request, $ }) {
+    async requestHandler({ $ }) {
+        // _request
         const title = $('title').text()
-        const paragraphs = $('p').map((i, el) => $(el).text()).get()
+        const paragraphs = $('p').map((_i, el) => $(el).text()).get()
 
         const data = {
             title: title,
