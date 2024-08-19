@@ -18,3 +18,7 @@ export const logRunTime = (startTime: number): void => {
     const seconds = Math.floor((timeTaken % (1000 * 60)) / 1000)
     console.log(`Time taken: ${days}d ${hours}h ${minutes}m ${seconds}s`)
 }
+
+export const sanitizeTitle = (title: string): string => {
+    return title.replace(/[\/\\?%*:|"<>]/g, '_').trim() + '.json'
+}
