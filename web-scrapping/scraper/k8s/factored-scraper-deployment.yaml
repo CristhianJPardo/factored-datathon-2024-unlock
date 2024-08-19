@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: factored-scraper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: factored-scraper
+  template:
+    metadata:
+      labels:
+        app: factored-scraper
+    spec:
+      containers:
+        - name: factored-scraper
+          image: factored-scraper:1.0.0
+          imagePullPolicy: IfNotPresent # Add to registry later
+          resources:
+            requests:
+              cpu: "0.5"
+              memory: 1Gi
+            limits:
+              cpu: 1
+              memory: 2Gi
