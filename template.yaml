@@ -112,7 +112,7 @@ Resources:
     Properties:
       BucketName: !Sub '${ResourcePrefix}-artifacts-bucket'
 
-  # SQS QUE
+  # SQS QUEUE
   URLQueue:
     Type: AWS::SQS::Queue
     Properties:
@@ -133,16 +133,14 @@ Resources:
             Path: /get_url
             Method: get
       Policies:
-        - PolicyName: GetUrlSQSPolicy
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - sqs:ReceiveMessage
-                  - sqs:DeleteMessage
-                  - sqs:GetQueueAttributes
-                Resource: !GetAtt URLQueue.Arn
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: "Allow"
+              Action:
+                - "sqs:ReceiveMessage"
+                - "sqs:DeleteMessage"
+                - "sqs:GetQueueAttributes"
+              Resource: !GetAtt URLQueue.Arn
 
   # Lambda para el endpoint post_url
   PostUrlFunction:
@@ -159,18 +157,14 @@ Resources:
             Path: /post_url
             Method: post
       Policies:
-        - PolicyName: PostUrlSQSPolicy
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - sqs:ReceiveMessage
-                  - sqs:DeleteMessage
-                  - sqs:GetQueueAttributes
-                Resource: !GetAtt URLQueue.Arn
-
-
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: "Allow"
+              Action:
+                - "sqs:ReceiveMessage"
+                - "sqs:DeleteMessage"
+                - "sqs:GetQueueAttributes"
+              Resource: !GetAtt URLQueue.Arn
 # outputs
 Outputs:
   # url avaliabality
