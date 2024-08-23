@@ -9,7 +9,7 @@ from typing import List
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Configuración del modelo y API token
-model_id = os.getenv("MODEL_ID", "sentence-transformers/all-MiniLM-L6-v2")
+model_id = os.getenv("MODEL_ID", "sentence-transformers/all-MiniLM-L6-v2") # Este modelo genera embeddings de dimension 384
 hf_token = os.getenv("HF_TOKEN", "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")
 
 api_url = f"https://api-inference.huggingface.co/pipeline/feature-extraction/{model_id}"
