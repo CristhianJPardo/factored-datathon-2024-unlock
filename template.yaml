@@ -100,18 +100,74 @@ Resources:
     Properties:
       BucketName: !Sub '${ResourcePrefix}-unzipped-bucket'
 
+  # Definition of the S3 Bucket for Medallion architecture
   MedallionBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
       BucketName: !Sub '${ResourcePrefix}-medallion-bucket'
 
+  # url availability
   ArtifactsBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
       BucketName: !Sub '${ResourcePrefix}-artifacts-bucket'
 
+  # SQS QUE
+  URLQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub '${ResourcePrefix}-url-queue'
+
+  # Lambda para el endpoint get_url
+  GetUrlFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./data-engineering/urls_availability/get_url
+      Environment:
+        Variables:
+          QUEUE_URL: !GetAtt URLQueue.QueueUrl
+      Events:
+        ApiGatewayGetUrl:
+          Type: Api
+          Properties:
+            Path: /get_url
+            Method: get
+      Policies:
+        - SQSReadPolicy:
+            QueueName: !GetAtt URLQueue.QueueName
+
+  # Lambda para el endpoint post_url
+  PostUrlFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./data-engineering/urls_availability/post_url
+      Environment:
+        Variables:
+          QUEUE_URL: !GetAtt URLQueue.QueueUrl
+      Events:
+        ApiGatewayPostUrl:
+          Type: Api
+          Properties:
+            Path: /post_url
+            Method: post
+      Policies:
+        - SQSReadPolicy:
+            QueueName: !GetAtt URLQueue.QueueName
+        - SQSDeleteMessagePolicy:
+            QueueName: !GetAtt URLQueue.QueueName
+
 # outputs
 Outputs:
+  # url avaliabality
+  GetUrlApi:
+    Description: "API Gateway endpoint URL for get_url"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/get_url/"
+
+  PostUrlApi:
+    Description: "API Gateway endpoint URL for post_url"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/post_url/"
+
+  # resources
   LambdaFunctionName:
     Description: Name of the Downloader Lambda Function
     Value: !Ref DownloaderLambda

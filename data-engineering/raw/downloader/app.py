@@ -1,7 +1,9 @@
 import os
 import requests
 import boto3
+import json
 from datetime import datetime, timedelta, timezone
+from aws_lambda_powertools.utilities.parser import parse, EventBridgeModel, LambdaUrlModel
 
 s3_client = boto3.client('s3')
 RAW_DATA_BUCKET_NAME = os.getenv("RAW_DATA_BUCKET_NAME")
@@ -62,6 +64,26 @@ def download_upload_files(file_names, type):
 
 
 def lambda_handler(event, context):
+    try:
+        if 'source' in event and 'detail' in event:
+            # Es un evento de EventBridge
+            parsed_event = parse(event, EventBridgeModel)
+            handle_eventbridge_event(parsed_event)
+        elif 'requestContext' in event:
+            # Es un evento de Lambda Function URL
+            parsed_event = parse(event, LambdaUrlModel)
+            custom_event = parsed_event.body  # Accede al evento custom
+            handle_lambda_url_event(custom_event)
+        
+        return {
+            'statusCode': 200,
+            'body': json.dumps({'message': 'Success'})
+        }
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'error': str(e)})
+        }
     print(event)
     type = event['type']
     formatted_date = get_formatted_date()
@@ -72,3 +94,11 @@ def lambda_handler(event, context):
     return {
         "statusCode": 200
     }
+
+def handle_eventbridge_event(event):
+    # Lógica para manejar eventos de EventBridge
+    print("Manejando evento de EventBridge:", event)
+
+def handle_lambda_url_event(event):
+    # Lógica para manejar eventos de Lambda URL
+    print("Manejando evento de Lambda URL:", event)
