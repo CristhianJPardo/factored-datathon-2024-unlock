@@ -15,7 +15,7 @@ st.set_page_config(
 
 st.title("Unlock")
 search = st.Page("tools/search.py", title="Search", icon=":material/search:")
-chat = st.Page("tools/chat.py", title="History", icon=":material/history:")
+chat = st.Page("tools/chat.py", title="Chat", icon=":material/chat:")
 visualization = st.Page(
     "tools/visualization.py", title="Visualization", icon=":material/dashboard:"
 )
