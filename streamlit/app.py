@@ -9,7 +9,8 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="auto",
 )
-st.logo("static/key.png", icon_image="static/key.png")
+# If you want to add a logo to the page, uncomment the line below and add the path to the image
+#st.logo("static/key.png", icon_image="static/key.png")
 
 ## Banner Config ##
 #st.image("static/unlock.png", use_column_width=None)
