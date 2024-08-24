@@ -9,7 +9,7 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="auto",
 )
-
+st.logo("static/key.png", icon_image="static/key.png")
 
 ## Banner Config ##
 #st.image("static/unlock.png", use_column_width=None)
