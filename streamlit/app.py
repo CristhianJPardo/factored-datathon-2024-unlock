@@ -11,11 +11,21 @@ st.set_page_config(
 )
 
 
-#################
 
 
-#################
-## Page Content##
-#################
-st.sidebar.markdown("## Home Page")
+st.title("Unlock")
+search = st.Page("tools/search.py", title="Search", icon=":material/search:")
+chat = st.Page("tools/chat.py", title="History", icon=":material/history:")
+visualization = st.Page(
+    "tools/visualization.py", title="Visualization", icon=":material/dashboard:"
+)
+
+pg = st.navigation(
+        {
+            #"Account": [logout_page],
+            #"Reports": [dashboard, bugs, alerts],
+            "Tools": [search, chat, visualization],
+        }
+    )
+pg.run()
 

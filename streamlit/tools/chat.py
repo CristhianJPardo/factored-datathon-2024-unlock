@@ -1,6 +1,5 @@
 import streamlit as st
-st.sidebar.markdown("## Chat")
-st.title("Risk Chat")
+st.markdown("## Risk Chat")
 """
 from anthropic import AnthropicBedrock
 
