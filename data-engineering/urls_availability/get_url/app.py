@@ -16,14 +16,10 @@ def lambda_handler(event, context):
         message = response['Messages'][0]
         receipt_handle = message['ReceiptHandle']
         body = json.loads(message['Body'])
-        
+        body["receipt_handle"] = receipt_handle
         return {
             'statusCode': 200,
-            'body': json.dumps({
-                'id': body['id'],
-                'url': body['url'],
-                'receipt_handle': receipt_handle
-            })
+            'body': json.dumps(body)
         }
     else:
         return {
