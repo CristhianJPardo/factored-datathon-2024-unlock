@@ -2,7 +2,8 @@ import glob
 import json
 import pandas as pd
 from typing import List, Dict, Union
-
+import re
+import unicodedata
 
 def clean_text(content: Union[str, List[str]]) -> str:
     """
@@ -24,6 +25,25 @@ def clean_text(content: Union[str, List[str]]) -> str:
                                           .replace("\t", " ")
                                           .split())
     return cleaned_text
+
+def clean_id(text: str) -> str:
+    """
+    Limpia el texto para usarlo como un ID válido en Pinecone, asegurando que solo contenga caracteres ASCII
+    y que conserve los espacios.
+
+    :param text: Texto para limpiar y convertir en un ID válido.
+    :return: ID limpio y válido.
+    """
+    # Normaliza el texto para eliminar acentos y convierte a ASCII
+    text = unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore').decode('ASCII')
+    
+    # Reemplaza caracteres no permitidos excepto espacios
+    text = re.sub(r'[^a-zA-Z0-9-_ ]', '', text)  # Permite caracteres alfanuméricos, guiones y espacios
+    
+    # Elimina espacios extra al principio o al final del texto
+    text = text.strip()
+    
+    return text[:255]  # Limita el ID a 255 caracteres para evitar problemas con Pinecone
 
 
 def load_json_files(path_pattern: str) -> List[Dict[str, list]]:
@@ -53,7 +73,7 @@ def json_to_dataframe(path_pattern: str) -> pd.DataFrame:
     """
     data = load_json_files(path_pattern)
     for row in data:
-        row["title"] = clean_text(row.get("title", ""))
+        row["title"] = clean_id(clean_text(row.get("title", "")))
         row["content"] = clean_text(row.get("content", ""))
     
     return pd.DataFrame(data)
@@ -65,6 +85,7 @@ def test_transform_data():
     """
     df = json_to_dataframe('web-scrapping/scraper/extraction/*.json')
     print(df)
+
     return(df)
 
 
