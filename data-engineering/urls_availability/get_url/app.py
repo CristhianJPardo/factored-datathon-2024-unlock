@@ -9,6 +9,7 @@ queue_url = os.environ['QUEUE_URL']
 def lambda_handler(event, context):
     batch_size = 1
 
+    print(event)
     batch_size_from_params = (
         event
         .get('queryStringParameters', {})
