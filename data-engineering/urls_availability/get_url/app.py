@@ -7,8 +7,18 @@ queue_url = os.environ['QUEUE_URL']
 
 
 def lambda_handler(event, context):
-    batch_size = event.get('queryStringParameters', {}).get('batch_size', 1)
-    batch_size = int(batch_size)
+    batch_size = 1
+
+    batch_size_from_params = (
+        event
+        .get('queryStringParameters', {})
+        .get('batch_size', 1)
+    )
+
+    if batch_size_from_params:
+        batch_size = int(batch_size_from_params)
+        batch_size = int(batch_size)
+        
     batch_size = min(batch_size, 10)
     
     response = sqs.receive_message(
