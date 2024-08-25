@@ -1,6 +1,5 @@
 import { CheerioCrawler } from 'crawlee'
-import { IUrlElement } from './helpers'
-import { addNew, searchInBlockedStack } from './helpers'
+import { IUrlElement, addNew, searchInBlockedStack } from './helpers.js'
 
 const MAX_CONCURRENCY = parseInt(process.env.MAX_CONCURRENCY!)
 const MIN_CONCURRENCY = parseInt(process.env.MIN_CONCURRENCY!)
@@ -67,6 +66,11 @@ export const crawler = new CheerioCrawler({
         }
 
         const content = getContent($)
+
+        if (!content) {
+            console.log(`Skipping ${request.url} - no content found`)
+            return // Skip saving if no content is found
+        }
 
         const remainingData: IUrlElement = searchInBlockedStack(request.url)
 
