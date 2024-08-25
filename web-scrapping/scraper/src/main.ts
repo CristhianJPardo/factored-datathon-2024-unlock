@@ -1,7 +1,7 @@
 import "dotenv/config.js"
 
 import { crawler } from './crawler.js'
-import { emptyResources, getMultipleUrlsToScrape, getNewsSize, logRunTime, newsToS3, saveNewsAsJson } from './helpers.js'
+import { emptyResources, getMultipleUrlsToScrape, getNewsSize, logRunTime, markUrlsAsScraped, newsToS3, saveNewsAsJson } from './helpers.js'
 
 const NUM_REQUESTS_TO_QUEUE = parseInt(process.env.NUM_REQUESTS_TO_QUEUE!)
 const NUM_ITERATIONS = parseInt(process.env.NUM_ITERATIONS!)
@@ -23,7 +23,18 @@ async function runScraper(n: number) {
             saveNewsAsJson()
 
             // Save news to S3 after each run
-            await newsToS3()
+            try {
+                await newsToS3()
+            } catch (err) {
+                throw err 
+            }
+
+            try {
+                markUrlsAsScraped()
+            } catch (err) {
+                console.error('Error marking all as scraped:', err)
+                throw err 
+            }
 
             totalNews += getNewsSize()
 

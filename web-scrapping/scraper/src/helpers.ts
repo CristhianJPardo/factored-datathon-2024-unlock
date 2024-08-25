@@ -95,6 +95,7 @@ export const newsToS3 = async () => {
         console.log(`File uploaded successfully. ${data.Location}`)
     } catch (err) {
         console.error(`Error uploading file: ${err}`)
+        throw err
     }
 }
 
@@ -143,14 +144,13 @@ export const getMultipleUrlsToScrape = async (count = 10): Promise<IUrlElement[]
 }
 
 
-export const markUrlAsScraped = (url: string): Promise<void> =>
+export const markUrlsAsScraped = (): Promise<void> =>
     new Promise((resolve, reject) => {
         const fetchUrl = `${baseUrl}/post_url/`
 
-        const request = searchInBlockedStack(url)
         fetch(fetchUrl, {
             method: 'POST',
-            body: JSON.stringify([{ receipt_handle: request.receipt_handle }]),
+            body: JSON.stringify(blockedStack.map(element => ({ receipt_handle: element.receipt_handle }))),
             headers: { 'Content-Type': 'application/json' }
         })
             .then((response) => {

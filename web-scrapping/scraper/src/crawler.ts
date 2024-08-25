@@ -1,5 +1,5 @@
 import { CheerioCrawler } from 'crawlee'
-import { IUrlElement, markUrlAsScraped } from './helpers'
+import { IUrlElement } from './helpers'
 import { addNew, searchInBlockedStack } from './helpers'
 
 const MAX_CONCURRENCY = parseInt(process.env.MAX_CONCURRENCY!)
@@ -78,10 +78,6 @@ export const crawler = new CheerioCrawler({
         })
 
         console.log(`Added ${request.url} to news array`)
-
-
-        markUrlAsScraped(request.url)
-        console.log(`Marked ${request.url} as scraped`)
     },
     maxConcurrency: MAX_CONCURRENCY,
     minConcurrency: MIN_CONCURRENCY,
