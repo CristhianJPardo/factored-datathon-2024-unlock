@@ -1,2 +1,6 @@
 .venv
 .env
+
+ml-pipeline-tools/data
+ml-pipeline-tools/extraction
+ml-pipeline-tools/__pycache__
