@@ -35,7 +35,7 @@ profile_file = file_name
 client = delta_sharing.SharingClient(profile_file)
 
 # List all shared tables.
-print(client.list_all_tables())
+# print(client.list_all_tables())
 
 news_per_day = profile_file + "#unlock-share-streamlit.platinum.news_per_day"
 total_database_size = profile_file + "#unlock-share-streamlit.platinum.total_database_size"
