@@ -1,7 +1,7 @@
 # Factored Datathon 2024 UNlock 🚀📊
 
 <p align="center">
-<img src="assets/logo.png" alt="" width="400" />
+<img src="logo.png" alt="" width="400" />
 </p>
 
 Welcome to the Factored Datathon 2024 UNlock! 🎉 Join our team of passionate data enthusiasts as we explore innovative ways to prevent risks and find solutions before they become problems. 📈💡
