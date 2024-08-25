@@ -46,8 +46,8 @@ def save_embeddings(df: pd.DataFrame, index_name: str, dimension: int):
 
     # Prepara los embeddings para la inserción en el índice
     title_embeddings: List[Dict[str,List[int]]] = [
-        {"id": title, "values": embedding}
-        for title, embedding in zip(df["title"].tolist(), df["embedding"].tolist())
+        {"id": idx, "values": embedding}
+        for idx, embedding in zip(df["md5_id"].tolist(), df["embedding"].tolist())
     ]
 
     try:
