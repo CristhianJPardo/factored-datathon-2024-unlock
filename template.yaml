@@ -141,6 +141,7 @@ Resources:
     Type: AWS::SQS::Queue
     Properties:
       QueueName: !Sub '${ResourcePrefix}-url-queue'
+      VisibilityTimeout: 60
 
   # Lambda para el endpoint get_url
   GetUrlFunction:
