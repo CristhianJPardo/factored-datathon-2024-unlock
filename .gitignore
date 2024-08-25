@@ -1,2 +1,7 @@
-.venv
-.env
+**/.venv
+**/.env
+# **/.DS_Store
+**/node_modules/
+**/storage
+**/extraction/
+
