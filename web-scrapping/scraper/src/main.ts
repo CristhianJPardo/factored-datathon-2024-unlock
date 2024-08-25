@@ -20,7 +20,7 @@ async function runScraper(n: number) {
             await crawler.run(elements.map(element => element.url))
 
             // Save news as JSON after all runs are complete
-            saveNewsAsJson()
+            // saveNewsAsJson()
 
             // Save news to S3 after each run
             try {
@@ -30,7 +30,7 @@ async function runScraper(n: number) {
             }
 
             try {
-                markUrlsAsScraped()
+                await markUrlsAsScraped()
             } catch (err) {
                 console.error('Error marking all as scraped:', err)
                 throw err 
