@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 # Configuración de Pinecone
 API_KEY = os.getenv('API_KEY')
 INDEX_NAME = "news-idx"
-DIM = 384
+DIM = 1536
 
 pc = Pinecone(api_key=API_KEY)
 
