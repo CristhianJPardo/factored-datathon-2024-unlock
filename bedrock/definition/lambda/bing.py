@@ -4,7 +4,7 @@ import os
 api_key = os.getenv("BING_API_KEY")
 
 
-def fetch_top_news(query, api_key, top_num=10):
+def fetch_top_news(query, top_num=10):
     # Define the endpoint and headers
     endpoint = "https://api.bing.microsoft.com/v7.0/news/search"
     headers = {"Ocp-Apim-Subscription-Key": api_key}
