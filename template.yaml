@@ -34,29 +34,22 @@ Resources:
       Policies:
         - S3WritePolicy:
             BucketName: !Sub '${ResourcePrefix}-rawdata-bucket'
+      Events:
+        DailyScheduleEvents:
+          Type: Schedule
+          Properties:
+            Schedule: cron(30 11 * * ? *)
+            Input: '{"type": "events"}'
+        DailyScheduleGkg:
+          Type: Schedule
+          Properties:
+            Schedule: cron(30 11 * * ? *)
+            Input: '{"type": "gkg"}'
       FunctionUrlConfig:
         AuthType: NONE
         Cors:
             AllowOrigins:
                 - "*"
-
-  # Definition of the Lambda Function for processing ZIP files
-  ZipProcessorLambda:
-    Type: 'AWS::Serverless::Function'
-    Properties:
-      Runtime: python3.12
-      CodeUri: ./data-engineering/raw/zip_processor/
-      MemorySize: 256
-      Timeout: 60
-      Environment:
-        Variables:
-          UNZIPPED_BUCKET_NAME: !Sub '${ResourcePrefix}-unzipped-bucket'
-      FunctionName: !Sub '${ResourcePrefix}-zip-processor-lambda'
-      Policies:
-        - S3ReadPolicy:
-            BucketName: !Sub '${ResourcePrefix}-rawdata-bucket'
-        - S3WritePolicy:
-            BucketName: !Sub '${ResourcePrefix}-unzipped-bucket'
 
   # Bedrock lambda
   BedrockLambda:
@@ -76,6 +69,31 @@ Resources:
             BucketName: !Sub '${ResourcePrefix}-medallion-bucket'
         - S3WritePolicy:
             BucketName: !Sub '${ResourcePrefix}-medallion-bucket'
+
+  # Definition of the Lambda Function for processing ZIP files
+  ZipProcessorLambda:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Runtime: python3.12
+      CodeUri: ./data-engineering/raw/zip_processor/
+      MemorySize: 256
+      Timeout: 60
+      Environment:
+        Variables:
+          UNZIPPED_BUCKET_NAME: !Sub '${ResourcePrefix}-unzipped-bucket'
+      FunctionName: !Sub '${ResourcePrefix}-zip-processor-lambda'
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Sub '${ResourcePrefix}-rawdata-bucket'
+        - S3WritePolicy:
+            BucketName: !Sub '${ResourcePrefix}-unzipped-bucket'
+
+  # Definition of the Lambda Function for processing ZIP files
+  ScrapingLambda:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Runtime: python3.12
+      CodeUri: ./data-engineering/scraping/
 
   # Permission for S3 to invoke the ZipProcessorLambda
   ZipProcessorPermission:
@@ -108,18 +126,90 @@ Resources:
     Properties:
       BucketName: !Sub '${ResourcePrefix}-unzipped-bucket'
 
+  # Definition of the S3 Bucket for Medallion architecture
   MedallionBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
       BucketName: !Sub '${ResourcePrefix}-medallion-bucket'
 
+  # Definition of the S3 Bucket for Medallion architecture
+  ScrapingBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Sub '${ResourcePrefix}-scraping-bucket'
+
+  # url availability
   ArtifactsBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
       BucketName: !Sub '${ResourcePrefix}-artifacts-bucket'
 
+  # SQS QUEUE
+  URLQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub '${ResourcePrefix}-url-queue'
+      VisibilityTimeout: 60
+
+  # Lambda para el endpoint get_url
+  GetUrlFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./data-engineering/urls_availability/get_url
+      Environment:
+        Variables:
+          QUEUE_URL: !GetAtt URLQueue.QueueUrl
+      Events:
+        ApiGatewayGetUrl:
+          Type: Api
+          Properties:
+            Path: /get_url
+            Method: get
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: "Allow"
+              Action:
+                - "sqs:ReceiveMessage"
+                - "sqs:DeleteMessage"
+                - "sqs:GetQueueAttributes"
+              Resource: !GetAtt URLQueue.Arn
+
+  # Lambda para el endpoint post_url
+  PostUrlFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./data-engineering/urls_availability/post_url
+      Environment:
+        Variables:
+          QUEUE_URL: !GetAtt URLQueue.QueueUrl
+      Events:
+        ApiGatewayPostUrl:
+          Type: Api
+          Properties:
+            Path: /post_url
+            Method: post
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: "Allow"
+              Action:
+                - "sqs:ReceiveMessage"
+                - "sqs:DeleteMessage"
+                - "sqs:GetQueueAttributes"
+              Resource: !GetAtt URLQueue.Arn
 # outputs
 Outputs:
+  # url avaliabality
+  GetUrlApi:
+    Description: "API Gateway endpoint URL for get_url"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/get_url/"
+
+  PostUrlApi:
+    Description: "API Gateway endpoint URL for post_url"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/post_url/"
+
+  # resources
   LambdaFunctionName:
     Description: Name of the Downloader Lambda Function
     Value: !Ref DownloaderLambda
@@ -138,4 +228,5 @@ Outputs:
 
   DownloaderLambdaUrl:
     Description: URL to invoke the Downloader Lambda function
-    Value: !GetAtt DownloaderLambda.FunctionUrl
+    Value:
+        Fn::GetAtt: DownloaderLambdaUrl.FunctionUrl
