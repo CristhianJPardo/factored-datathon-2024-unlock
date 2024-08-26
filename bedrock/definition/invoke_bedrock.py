@@ -68,3 +68,8 @@ def invokeAgent(inputText: str):
 
     # And here is the response if you just want to see agent's reply
     return agent_answer
+
+
+# invokeAgent monitor_travel_restrictions
+
+invokeAgent("Monitor travel restrictions in the US")
