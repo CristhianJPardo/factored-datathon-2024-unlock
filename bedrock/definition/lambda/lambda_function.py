@@ -88,3 +88,4 @@ def validate_news_sources(new):
     query = f"is it true that {new}"
     top_news = fetch_top_news(query, top_num=5)
     return f"Here are the top news articles: {top_news}"
+
