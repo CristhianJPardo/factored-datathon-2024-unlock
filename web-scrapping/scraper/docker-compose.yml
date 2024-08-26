@@ -1,0 +1,18 @@
+services:
+  factored-scraper:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: factored-scraper:1.0.1
+    container_name: factored-scraper-container
+    platform: linux/amd64
+
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5" # Limit container to 50% of a single CPU core
+          memory: "512M" # Limit container to 512MB of RAM
+        # reservations:
+        #   cpus: "0.25" # Reserve 25% of a single CPU core
+        #   memory: "256M" # Reserve 256MB of RAM

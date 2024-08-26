@@ -1,0 +1,28 @@
+{
+    "name": "scraper",
+    "version": "0.0.1",
+    "type": "module",
+    "description": "This is an example of a Crawlee project.",
+    "dependencies": {
+        "aws-sdk": "^2.1682.0",
+        "cheerio": "^1.0.0-rc.12",
+        "crawlee": "^3.11.1",
+        "dotenv": "^16.4.5",
+        "short-uuid": "^5.2.0"
+    },
+    "devDependencies": {
+        "@apify/tsconfig": "^0.1.0",
+        "@types/node": "^20.0.0",
+        "tsx": "^4.4.0",
+        "typescript": "~5.5.0"
+    },
+    "scripts": {
+        "start": "npm run start:dev",
+        "start:prod": "node dist/main.js",
+        "start:dev": "tsx src/main.ts",
+        "build": "tsc",
+        "test": "echo \"Error: oops, the actor has no tests yet, sad!\" && exit 1"
+    },
+    "author": "It's not you it's me",
+    "license": "ISC"
+}

@@ -1,2 +1,9 @@
 .venv
 testing/
+**/.venv
+**/.env
+**/.DS_Store
+**/node_modules/
+**/storage
+**/extraction/
+**/tutorials/
