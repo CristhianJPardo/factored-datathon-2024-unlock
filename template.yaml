@@ -64,8 +64,6 @@ Resources:
     Properties:
       Runtime: python3.12
       Handler: lambda_function.lambda_handler
-      Architectures:
-      - arm64
       CodeUri: ./bedrock/definition/lambda
       MemorySize: 256
       Timeout: 60
