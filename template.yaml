@@ -90,45 +90,12 @@ Resources:
         - S3WritePolicy:
             BucketName: !Sub '${ResourcePrefix}-unzipped-bucket'
 
-<<<<<<< HEAD
   # Definition of the Lambda Function for processing ZIP files
   ScrapingLambda:
     Type: 'AWS::Serverless::Function'
     Properties:
       Runtime: python3.12
       CodeUri: ./data-engineering/scraping/
-=======
-  # Bedrock lambda
-  BedrockLambda:
-    Type: 'AWS::Serverless::Function'
-    Properties:
-      Runtime: python3.12
-      Handler: lambda_function.lambda_handler
-      Architectures:
-      - arm64
-      CodeUri: ./bedrock/definition/lambda
->>>>>>> f766249a032ac46acfb667f80b457018f1bc16c4
-      MemorySize: 256
-      Timeout: 60
-      Environment:
-        Variables:
-<<<<<<< HEAD
-          SCRAPING_BUCKET_NAME: !Sub '${ResourcePrefix}-scraping-bucket'
-      FunctionName: !Sub '${ResourcePrefix}-scraping-lambda'
-      Policies:
-        - S3ReadPolicy:
-            BucketName: !Sub '${ResourcePrefix}-scraping-bucket'
-        - S3WritePolicy:
-            BucketName: !Sub '${ResourcePrefix}-scraping-bucket'
-=======
-          MEDALLION_BUCKET_NAME: !Sub '${ResourcePrefix}-medallion-bucket'
-      FunctionName: !Sub '${ResourcePrefix}-bedrock-lambda'
-      Policies:
-        - S3ReadPolicy:
-            BucketName: !Sub '${ResourcePrefix}-medallion-bucket'
-        - S3WritePolicy:
-            BucketName: !Sub '${ResourcePrefix}-medallion-bucket'
->>>>>>> f766249a032ac46acfb667f80b457018f1bc16c4
 
   # Permission for S3 to invoke the ZipProcessorLambda
   ZipProcessorPermission:
