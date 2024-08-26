@@ -1,3 +1,6 @@
+from bing import fetch_top_news
+
+
 def lambda_handler(event, context):
     agent = event["agent"]
     actionGroup = event["actionGroup"]
@@ -80,17 +83,19 @@ def lambda_handler(event, context):
 
 
 def monitor_travel_restrictions(region):
-    # Placeholder return value
-    return (
-        f"Travel restrictions for region {region} are as follows: [link1, link2, link3]"
-    )
+
+    query = f"travel restrictions related to monkeypox for {region}"
+    top_news = fetch_top_news(query, top_num=5)
+    return f"Here are the top news articles: {top_news}"
 
 
 def analyze_public_sentiment(destination, time_frame):
-    # Placeholder return value
-    return f"Positive sentiment score of 75 for destination {destination} during {time_frame}, links of related news articles: [link1, link2, link3]"
+    query = f"perception towards {destination} about monkeypox in the past {time_frame}"
+    top_news = fetch_top_news(query, top_num=5)
+    return f"Here are the top news articles: {top_news}"
 
 
 def validate_news_sources(region, topic):
-    # Placeholder return value
-    return f"News sources validated for region {region} and topic {topic} links related to the topic: [link1, link2, link3]"
+    query = f"news sources related to {topic} in {region}"
+    top_news = fetch_top_news(query, top_num=5)
+    return f"Here are the top news articles: {top_news}"
