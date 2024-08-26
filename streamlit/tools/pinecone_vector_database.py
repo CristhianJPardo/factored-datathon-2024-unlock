@@ -5,7 +5,7 @@ import pandas as pd
 import os
 from dotenv import load_dotenv
 # Configuración de Pinecone
-API_KEY = os.getenv('API_KEY')
+API_KEY = os.getenv('PINECONE')
 INDEX_NAME = "news-idx"
 DIM = 1536
 
@@ -89,7 +89,7 @@ def knn_pinecone(question: str, k: int):
 
 
 if __name__ == "__main__":
-    from json_cleaner_and_converter import json_to_dataframe
+    from x import json_to_dataframe
 
     # Carga el DataFrame desde archivos JSON
     df = json_to_dataframe('web-scrapping/scraper/extraction/*.json')
