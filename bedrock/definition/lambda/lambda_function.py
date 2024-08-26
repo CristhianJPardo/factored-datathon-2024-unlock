@@ -10,24 +10,16 @@ def lambda_handler(event, context):
 
     if function == "monitor_travel_restrictions":
         region = None
-        alert_threshold = None
-        coverage_type = None
 
         for param in parameters:
             if param["name"] == "region":
                 region = param["value"]
-            if param["name"] == "alert_threshold":
-                alert_threshold = param["value"]
-            if param["name"] == "coverage_type":
-                coverage_type = param["value"]
 
         if not region:
             raise Exception("Missing mandatory parameter: region")
-        if not alert_threshold:
-            raise Exception("Missing mandatory parameter: alert_threshold")
 
         changes_summary = monitor_travel_restrictions(
-            region, alert_threshold, coverage_type
+            region
         )
         responseBody = {"TEXT": {"body": changes_summary}}
 
@@ -52,19 +44,16 @@ def lambda_handler(event, context):
         }
 
     elif function == "validate_news_sources":
-        news_id = None
-        source_criteria = None
+        new = None
 
         for param in parameters:
-            if param["name"] == "news_id":
-                news_id = param["value"]
-            if param["name"] == "source_criteria":
-                source_criteria = param["value"]
+            if param["name"] == "new":
+                new = param["value"]
 
-        if not news_id:
-            raise Exception("Missing mandatory parameter: news_id")
+        if not new:
+            raise Exception("Missing mandatory parameter: new")
 
-        validation_report = validate_news_sources(news_id, source_criteria)
+        validation_report = validate_news_sources(new)
         responseBody = {"TEXT": {"body": validation_report}}
 
     action_response = {
@@ -95,7 +84,7 @@ def analyze_public_sentiment(destination, time_frame):
     return f"Here are the top news articles: {top_news}"
 
 
-def validate_news_sources(region, topic):
-    query = f"news sources related to {topic} in {region}"
+def validate_news_sources(new):
+    query = f"is it true that {new}"
     top_news = fetch_top_news(query, top_num=5)
     return f"Here are the top news articles: {top_news}"
