@@ -7,3 +7,11 @@ testing/
 **/storage
 **/extraction/
 **/tutorials/
+.env
+
+ml-pipeline-tools/data
+ml-pipeline-tools/extraction
+ml-pipeline-tools/__pycache__
+
+*.json
+ml-pipeline-tools/data1
