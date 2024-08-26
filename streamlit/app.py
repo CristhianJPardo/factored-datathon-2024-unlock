@@ -7,6 +7,16 @@ import delta_sharing
 
 load_dotenv()  # take environment variables from .env.
 
+#################
+## Page Config ##
+#################
+st.set_page_config(
+    page_title="Unlock",
+    page_icon="static/dollar.png",
+    layout="wide",
+    initial_sidebar_state="auto",
+)
+
 #########################################################
 SHARECREDENTIALSVERSION = os.getenv("SHARECREDENTIALSVERSION")
 BEARERTOKEN = os.getenv("BEARERTOKEN")
@@ -34,29 +44,19 @@ profile_file = file_name
 # Create a SharingClient.
 client = delta_sharing.SharingClient(profile_file)
 
-# List all shared tables.
-# print(client.list_all_tables())
+@st.cache_data
+def fetch_and_clean_data(schema, table_name):
+    data_name = profile_file + f"#unlock-share-streamlit.{schema}.{table_name}"
+    data = delta_sharing.load_as_pandas(data_name)
+    return data
 
-news_per_day = profile_file + "#unlock-share-streamlit.platinum.news_per_day"
-total_database_size = profile_file + "#unlock-share-streamlit.platinum.total_database_size"
-
-df_news_per_day = delta_sharing.load_as_pandas(news_per_day)
-df_total_database_size = delta_sharing.load_as_pandas(total_database_size)
-
+df_news_per_day = fetch_and_clean_data("platinum", "news_per_day")
+df_total_database_size = fetch_and_clean_data("platinum", "total_database_size") 
 
 print(df_news_per_day.head())
-# TODO: GUARDAR DATOS EN CACHE
 ############################################################
 
-#################
-## Page Config ##
-#################
-st.set_page_config(
-    page_title="Unlock",
-    page_icon="static/dollar.png",
-    layout="wide",
-    initial_sidebar_state="auto",
-)
+
 # If you want to add a logo to the page, uncomment the line below and add the path to the image
 #st.logo("static/key.png", icon_image="static/key.png")
 
