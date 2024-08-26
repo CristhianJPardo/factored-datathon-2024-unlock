@@ -1,0 +1,40 @@
+{
+    "version": "2.0",
+    "routeKey": "$default",
+    "rawPath": "/",
+    "rawQueryString": "",
+    "headers": {
+        "x-amzn-tls-cipher-suite": "TLS_AES_128_GCM_SHA256",
+        "content-length": "115",
+        "x-amzn-tls-version": "TLSv1.3",
+        "x-amzn-trace-id": "Self=1-66bfef0c-3e0b95cf5eea604e04f38aaf;Root=1-66bfef0c-4317f8855dca7c761f5fc2ef",
+        "x-forwarded-proto": "https",
+        "host": "flhr33mrnk73bookdat62sqpvy0oghgl.lambda-url.us-east-1.on.aws",
+        "x-forwarded-port": "443",
+        "content-type": "application/json",
+        "x-forwarded-for": "34.42.128.118",
+        "accept-encoding": "gzip, deflate",
+        "accept": "*/*",
+        "user-agent": "python-requests/2.32.3"
+    },
+    "requestContext": {
+        "accountId": "anonymous",
+        "apiId": "flhr33mrnk73bookdat62sqpvy0oghgl",
+        "domainName": "flhr33mrnk73bookdat62sqpvy0oghgl.lambda-url.us-east-1.on.aws",
+        "domainPrefix": "flhr33mrnk73bookdat62sqpvy0oghgl",
+        "http": {
+            "method": "POST",
+            "path": "/",
+            "protocol": "HTTP/1.1",
+            "sourceIp": "34.42.128.118",
+            "userAgent": "python-requests/2.32.3"
+        },
+        "requestId": "a04b631a-ee86-4713-985a-14e5f906463d",
+        "routeKey": "$default",
+        "stage": "$default",
+        "time": "17/Aug/2024:00:30:04 +0000",
+        "timeEpoch": 1723854604530
+    },
+    "body": "{'file_names': ['20240812.export.CSV.zip', '20240811.export.CSV.zip', '20240810.export.CSV.zip'], 'type': 'events'}",
+    "isBase64Encoded": false
+}
