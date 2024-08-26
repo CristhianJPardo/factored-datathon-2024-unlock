@@ -4,7 +4,7 @@ import os
 api_key = os.getenv("BING_API_KEY")
 
 
-def fetch_top_news(query, api_key, top_num=10):
+def fetch_top_news(query, top_num=10):
     # Define the endpoint and headers
     endpoint = "https://api.bing.microsoft.com/v7.0/news/search"
     headers = {"Ocp-Apim-Subscription-Key": api_key}
@@ -27,6 +27,8 @@ def fetch_top_news(query, api_key, top_num=10):
     for article in articles:
         title = article.get("name", "No title")
         content = article.get("description", "No content")
+        # truncate content to 200 words
+        content = content[:200] + "..." if len(content) > 200 else content
         url = article.get("url", "No URL")
         top_news.append({"title": title, "content": content, "url": url})
 
