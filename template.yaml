@@ -88,13 +88,6 @@ Resources:
         - S3WritePolicy:
             BucketName: !Sub '${ResourcePrefix}-unzipped-bucket'
 
-  # Definition of the Lambda Function for processing ZIP files
-  ScrapingLambda:
-    Type: 'AWS::Serverless::Function'
-    Properties:
-      Runtime: python3.12
-      CodeUri: ./data-engineering/scraping/
-
   # Permission for S3 to invoke the ZipProcessorLambda
   ZipProcessorPermission:
     Type: 'AWS::Lambda::Permission'
