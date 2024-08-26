@@ -18,6 +18,7 @@ def lambda_handler(event, context):
         if not region:
             raise Exception("Missing mandatory parameter: region")
 
+        #updated param
         changes_summary = monitor_travel_restrictions(
             region
         )
@@ -88,4 +89,3 @@ def validate_news_sources(new):
     query = f"is it true that {new}"
     top_news = fetch_top_news(query, top_num=5)
     return f"Here are the top news articles: {top_news}"
-
