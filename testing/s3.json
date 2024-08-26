@@ -1,0 +1,38 @@
+{
+    "Records": [
+        {
+            "eventVersion": "2.1",
+            "eventSource": "aws:s3",
+            "awsRegion": "us-east-1",
+            "eventTime": "2024-08-16T01:58:45.669Z",
+            "eventName": "ObjectCreated:Put",
+            "userIdentity": {
+                "principalId": "AWS:AROA2XVH6OLDLXHKU6WJZ:factored-hackaton-2024-unlock-downloader-lambda"
+            },
+            "requestParameters": {
+                "sourceIPAddress": "54.224.76.40"
+            },
+            "responseElements": {
+                "x-amz-request-id": "QP1B7KXR9S1ACJ6N",
+                "x-amz-id-2": "LWdI4KmKn0NuOqLG4CQQROLGAJ4fdD17P4VSbe6664WyGM69H/aSlKkeFpx45XurGSvD9gKq/GwMLhWX3wecvjExfFLG65Xv"
+            },
+            "s3": {
+                "s3SchemaVersion": "1.0",
+                "configurationId": "MmYyODRlNGEtODhhOS00Y2RlLThmZDktNmQ5M2IwOWJiMmJi",
+                "bucket": {
+                    "name": "factored-hackaton-2024-unlock-rawdata-bucket",
+                    "ownerIdentity": {
+                        "principalId": "A2BKYZP4IXAU8Q"
+                    },
+                    "arn": "arn:aws:s3:::factored-hackaton-2024-unlock-rawdata-bucket"
+                },
+                "object": {
+                    "key": "events/20240814.export.CSV.zip",
+                    "size": 8958043,
+                    "eTag": "e8eade9a8abb7a6354459d3cd28caec0",
+                    "sequencer": "0066BEB25528A3FEC0"
+                }
+            }
+        }
+    ]
+}
