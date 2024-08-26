@@ -27,6 +27,8 @@ def fetch_top_news(query, top_num=10):
     for article in articles:
         title = article.get("name", "No title")
         content = article.get("description", "No content")
+        # truncate content to 200 words
+        content = content[:200] + "..." if len(content) > 200 else content
         url = article.get("url", "No URL")
         top_news.append({"title": title, "content": content, "url": url})
 
