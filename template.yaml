@@ -51,6 +51,27 @@ Resources:
             AllowOrigins:
                 - "*"
 
+  # Bedrock lambda
+  BedrockLambda:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Runtime: python3.12
+      Handler: lambda_function.lambda_handler
+      Architectures:
+      - arm64
+      CodeUri: ./bedrock/definition/lambda
+      MemorySize: 256
+      Timeout: 60
+      Environment:
+        Variables:
+          MEDALLION_BUCKET_NAME: !Sub '${ResourcePrefix}-medallion-bucket'
+      FunctionName: !Sub '${ResourcePrefix}-bedrock-lambda'
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Sub '${ResourcePrefix}-medallion-bucket'
+        - S3WritePolicy:
+            BucketName: !Sub '${ResourcePrefix}-medallion-bucket'
+
   # Definition of the Lambda Function for processing ZIP files
   ZipProcessorLambda:
     Type: 'AWS::Serverless::Function'
