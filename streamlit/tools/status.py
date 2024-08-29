@@ -165,7 +165,3 @@ else:
         df_news_per_day, y="news_per_day", title="Box Plot of Number of News Articles"
     )
     st.plotly_chart(fig)
-
-    # Data Table
-    st.subheader("News Data per Day")
-    st.dataframe(df_news_per_day)
