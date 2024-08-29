@@ -60,7 +60,7 @@ Welcome to the Travel Insights Dashboard! This application provides valuable inf
 """)
 
 ## Tabs for different functionalities
-tab1, tab2 = st.tabs(["Search", "Chat"])
+tab1, tab2, tab3 = st.tabs(["Search", "Chat", "Status"])
 
 # Search Tab
 with tab1:
@@ -100,6 +100,28 @@ with tab2:
     with col2:
         st.image(
             "https://i.cbc.ca/1.2730018.1437112433!/fileImage/httpImage/image.jpg_gen/derivatives/16x9_780/hitchbot-victoria-or-bust.jpg"
+        )
+
+with tab3:
+    col1, col2 = st.columns(2)
+    with col1:
+        st.image(
+            "https://images.ctfassets.net/pdf29us7flmy/1OY6V5qnB5e490hm3lTK2i/c490cc85b117b64bc5ac10f0b9d6f1a4/GOLD-6487-CareerGuide-Batch04-Images-GraphCharts-04-Histogram.png"
+        )
+    with col2:
+        st.header("Status")
+        st.markdown(
+            """
+In this section, you'll find detailed information about the current state of our dataset. Here’s what you can expect to find:
+
+- **Dataset Size:** Get an overview of the total volume of data available, including file sizes and the number of records. This helps you gauge the scale and comprehensiveness of the dataset.
+- **Last Updated:** Check the most recent update timestamp to ensure you're working with the latest data. We regularly refresh our datasets to incorporate new information and maintain accuracy.
+- **Update Frequency:** Learn about how often the dataset is updated. Whether it’s daily, weekly, or monthly, this information helps you understand the freshness of the data.
+- **Version History:** Access a log of changes made to the dataset over time. This includes major updates, corrections, and any modifications that could impact your use of the data.
+- **Data Integrity Checks:** Find details about the quality assurance processes in place to ensure the reliability and consistency of the data. This section includes information on validation checks and error handling practices.
+
+Stay informed about the state of the dataset to better manage your data-driven projects and ensure that your analyses are based on the most current and accurate information available.
+            """
         )
 st.divider()
 
