@@ -3,13 +3,14 @@ import embedding_generator
 from typing import List, Dict
 import pandas as pd
 import os
-from dotenv import load_dotenv
+
 # Configuración de Pinecone
-API_KEY = os.getenv('PINECONE')
+API_KEY = os.getenv("PINECONE")
 INDEX_NAME = "news-idx"
 DIM = 1536
 
 pc = Pinecone(api_key=API_KEY)
+
 
 def create_index_if_not_exists(index_name: str, dimension: int):
     """
@@ -21,14 +22,12 @@ def create_index_if_not_exists(index_name: str, dimension: int):
                 name=index_name,
                 dimension=dimension,
                 metric="cosine",
-                spec=ServerlessSpec(
-                    cloud='aws',
-                    region='us-east-1'
-                )
+                spec=ServerlessSpec(cloud="aws", region="us-east-1"),
             )
             print(f"Index '{index_name}' created successfully.\n")
         except Exception as e:
             raise RuntimeError(f"Failed to create index: {e}")
+
 
 def save_embeddings(df: pd.DataFrame, index_name: str, dimension: int):
     """
@@ -45,7 +44,7 @@ def save_embeddings(df: pd.DataFrame, index_name: str, dimension: int):
     print(index.describe_index_stats())
 
     # Prepara los embeddings para la inserción en el índice
-    title_embeddings: List[Dict[str,List[int]]] = [
+    title_embeddings: List[Dict[str, List[int]]] = [
         {"id": idx, "values": embedding}
         for idx, embedding in zip(df["md5_id"].tolist(), df["embedding"].tolist())
     ]
@@ -63,41 +62,38 @@ def save_embeddings(df: pd.DataFrame, index_name: str, dimension: int):
         print("Index stats:", stats)
     except Exception as e:
         raise RuntimeError(f"Failed to describe index stats: {e}")
-    
+
+
 def knn_pinecone(question: str, k: int):
     """
     Realiza una búsqueda de k vecinos más cercanos para la pregunta dada en el índice Pinecone.
     """
     index = pc.Index(INDEX_NAME)
-    
+
     # Genera el embedding para la pregunta
     embedding_question = embedding_generator.query(question)
 
     try:
         # Realiza la consulta en el índice
         query_results = index.query(
-            namespace="ns1",
-            vector=embedding_question,
-            top_k=k,
-            include_values=True
+            namespace="ns1", vector=embedding_question, top_k=k, include_values=True
         )
-            
+
         return query_results
     except Exception as e:
         raise RuntimeError(f"Failed to query the index: {e}")
-
 
 
 if __name__ == "__main__":
     from x import json_to_dataframe
 
     # Carga el DataFrame desde archivos JSON
-    df = json_to_dataframe('web-scrapping/scraper/extraction/*.json')
-    
+    df = json_to_dataframe("web-scrapping/scraper/extraction/*.json")
+
     # Genera embeddings para el contenido del DataFrame
     embeddings = embedding_generator.query(df["content"].tolist())
-    df["embedding"] = embeddings  
-    
+    df["embedding"] = embeddings
+
     # Guarda los embeddings en el índice de Pinecone
     save_embeddings(df, INDEX_NAME, DIM)
     # Realiza una búsqueda de ejemplo
