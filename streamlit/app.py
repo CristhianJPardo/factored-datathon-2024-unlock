@@ -65,7 +65,7 @@ def fetch_and_clean_data(schema, table_name):
 
 
 df_news_per_day = fetch_and_clean_data("platinum", "news_per_day")
-df_total_database_size = fetch_and_clean_data("platinum", "total_database_size")
+
 ############################################################
 
 
@@ -83,16 +83,22 @@ st.sidebar.markdown("""
 ## Page Title ##
 col1, col2, col3 = st.columns(3)
 col1.title("Unlock")
+
+df_sorted = df_news_per_day.sort_values(by='date', ascending=False)
+
+most_recent_news_per_day = df_sorted.iloc[0]['news_per_day']
+
+total_news = df_news_per_day['news_per_day'].sum()
+
 col2.metric(
     "Aggregated Today",
     str(df_news_per_day["date"].tolist()[0]),
     str(
-        int(df_news_per_day["news_per_day"].tolist()[0])
-        - int(df_news_per_day["news_per_day"].tolist()[1])
+        int(most_recent_news_per_day)
     ),
 )
 col3.metric(
-    "Today News", int(df_total_database_size["total_database_size"].tolist()[0])
+    "Total News", int(total_news)
 )
 st.divider()
 
