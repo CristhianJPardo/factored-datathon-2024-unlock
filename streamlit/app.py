@@ -61,6 +61,17 @@ df_total_database_size = fetch_and_clean_data("platinum", "total_database_size")
 ############################################################
 
 
+st.sidebar.title("Unlock Team")
+st.sidebar.markdown("""
+                   - **[Juan Pablo Gomez](https://www.linkedin.com/in/juan-pablo-gomez-mendez/)**
+                        - *Software Engineer*
+                   - **[Christian Pardo](https://www.linkedin.com/in/cristhian-pardo/)**
+                        - *Data Architect*
+                   -  **[Eduards Mendez](https://www.linkedin.com/in/eduards-alexis-mendez-chipatecua-8584b21b4/)**
+                        - *Machine Learning Engineer*
+                   - **[Daniel Melo](https://www.linkedin.com/in/daniel-melo-09aa82325/)**
+                        - *Data Engineer*
+                    """)
 ## Page Title ##
 col1, col2, col3 = st.columns(3)
 col1.title("Unlock")
