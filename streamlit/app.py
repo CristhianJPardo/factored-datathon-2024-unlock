@@ -27,6 +27,14 @@ INDEX_NAME = "news-idx"
 DIM = 1536
 pc = Pinecone(api_key=API_KEY)
 
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_REGION = os.getenv("AWS_REGION")
+
+bucket_name = os.getenv("bucket_name")
+catalog = os.getenv("catalog")
+schema = os.getenv("schema")
+
 credentials = {
     "shareCredentialsVersion": SHARECREDENTIALSVERSION,
     "bearerToken": BEARERTOKEN,
