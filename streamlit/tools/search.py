@@ -5,7 +5,7 @@ from pinecone import Pinecone
 from dotenv import load_dotenv
 from typing import List
 import openai
-
+import time
 import boto3
 import json
 
@@ -149,6 +149,7 @@ if title:
 
     md5_ids: list = search_pinecone(title)
     with st.spinner("Searching..."):
+        time.sleep(5)
         json_data_list: list = get_multiple_jsons(s3_client, bucket_name, catalog, schema, md5_ids)  # keys: (title, content, url)
 
     if json_data_list:
