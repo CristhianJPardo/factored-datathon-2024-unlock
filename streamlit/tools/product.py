@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import pydeck as pdk
 import json
 import os
 from dotenv import load_dotenv
@@ -127,37 +126,4 @@ st.divider()
 # Visualization
 st.header("Visualization")
 chart_data= chart_data.astype(float)
-print(chart_data.info())
-st.pydeck_chart(
-    pdk.Deck(
-        map_style=None,
-        initial_view_state=pdk.ViewState(
-            latitude=4.57,
-            longitude=-74.2973,
-            zoom=5,
-            pitch=50,
-        ),
-        layers=[
-            pdk.Layer(
-                "HexagonLayer",
-                data=chart_data,
-                get_position="[lon, lat]",
-                radius=200,
-                elevation_scale=100,
-                elevation_range=[0, 1000],
-                pickable=True,
-                extruded=True,
-                auto_highlight=True,
-                coverage=1,
-            ),
-            pdk.Layer(
-                "ScatterplotLayer",
-                data=chart_data,
-                get_position="[lon, lat]",
-                get_color="[200, 30, 0, 160]",
-                get_radius=200,
-                pickable=True,
-            ),
-        ],
-    )
-)
+st.map(chart_data, latitude='lat', longitude='lon', size="10", color="#FF5733")
