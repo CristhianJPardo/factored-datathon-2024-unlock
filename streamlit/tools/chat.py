@@ -6,8 +6,10 @@ import logging
 import os
 from dotenv import load_dotenv
 import time
-
 from streamlit.delta_generator import DeltaGenerator
+
+
+st.markdown("#### Risk Chat")
 
 # Cargar las variables de entorno
 load_dotenv()
@@ -81,7 +83,7 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 
-st.markdown("#### Risk Chat")
+
 
 
 # Captura la entrada del usuario
