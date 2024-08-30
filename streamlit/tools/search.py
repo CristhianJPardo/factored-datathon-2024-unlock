@@ -133,7 +133,7 @@ def knn_pinecone(question: str, k: int):
         raise RuntimeError(f"Failed to query the index: {e}")
     
 
-def search_pinecone(question, k = 10):
+def search_pinecone(question, k = 4):
 
     results = knn_pinecone(question, k)
     id_list: list= [results["matches"][i]['id'] for i in range(k)]
