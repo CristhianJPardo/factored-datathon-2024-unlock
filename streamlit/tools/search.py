@@ -156,10 +156,9 @@ if title:
         for data in json_data_list:
             # Generar un resumen del contenido
             summary = summarize_content(data['content'][0:500])
-            st.markdown(f"### [{data['title']}]({data['url']})")
-            st.markdown(f"{summary}")
+            content = st.container(border=True)
+            content.markdown(f"### [{data['title']}]({data['url']})")
+            content.markdown(f"{summary}")
             # st.markdown(f"{data['content'][0:200]}") # TODO: usar la api de openai para los resumenes
-            # st.markdown(f"[Read more]({data['url']})")
-            st.markdown("---")  # Línea divisoria entre resultados
     else:
         st.write("No results found.")
