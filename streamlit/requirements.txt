@@ -51,7 +51,7 @@ narwhals==1.5.5
 nltk==3.9.1
 nodeenv==1.9.1
 numpy==2.1.0
-openai==1.42.0
+openai==1.43.0
 packaging==24.1
 pandas==2.2.2
 pillow==10.4.0
