@@ -92,7 +92,7 @@ total_news = df_news_per_day['news_per_day'].sum()
 
 col2.metric(
     "Aggregated Today",
-    str(df_sorted["date"].tolist()[0]),
+    str(df_news_per_day["date"].tolist()[0]),
     str(
         int(most_recent_news_per_day)
     ),
