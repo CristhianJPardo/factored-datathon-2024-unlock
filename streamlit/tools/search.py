@@ -33,9 +33,9 @@ AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 AWS_REGION = os.getenv("AWS_REGION")
 
-bucket_name = os.getenv("bucket_name")
-catalog = os.getenv("catalog")
-schema = os.getenv("schema")
+bucket_name = 'factored-hackaton-2024-unlock-medallion-bucket'
+catalog = 'catalog=factored_hackaton_2024'
+schema = 'schema=silver'
 
 s3_client = boto3.client(
     's3',
