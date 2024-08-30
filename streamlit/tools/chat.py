@@ -119,7 +119,7 @@ if user_input:
         with st.spinner("Thinking..."):
             loading_text = st.empty()
             loading_text.markdown(
-                "<p style='color: #888888;'>Unlock Bot is querying Pinecone and Bing Api for accurate results...</p>",
+                "<p style='color: #888888;'> <b>Unlock Bot Agent</b> is querying <b>Pinecone</b> and <b>Bing Api</b> for accurate results...</p>",
                 unsafe_allow_html=True,
             )
 
