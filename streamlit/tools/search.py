@@ -6,6 +6,9 @@ from dotenv import load_dotenv
 from typing import List
 import openai
 
+import boto3
+import json
+
 # Configuración de logging
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -24,6 +27,53 @@ INDEX_NAME = "news-idx"
 DIM = 1536
 pc = Pinecone(api_key=API_KEY)
 
+# Configuracion AWS
+
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_REGION = os.getenv("AWS_REGION")
+
+bucket_name = os.getenv("bucket_name")
+catalog = os.getenv("catalog")
+schema = os.getenv("schema")
+
+s3_client = boto3.client(
+    's3',
+    aws_access_key_id=AWS_ACCESS_KEY_ID,
+    aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+    region_name=AWS_REGION 
+)
+
+def get_json_from_s3(s3_client, bucket_name, catalog, schema, md5_id):
+    
+    prefix = f"{catalog}/{schema}/scraped_json/md5_id={md5_id}/"
+    response = s3_client.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
+    json_file_key = None
+    for obj in response.get('Contents', []):
+        if obj['Key'].endswith('.json'):
+            json_file_key = obj['Key']
+            break
+    
+    if not json_file_key:
+        raise FileNotFoundError(f"No se encontrÃ³ un archivo JSON en la carpeta con md5_id={md5_id}")
+    
+    json_object = s3_client.get_object(Bucket=bucket_name, Key=json_file_key)
+    json_content = json_object['Body'].read().decode('utf-8')
+    json_dict = [json.loads(line) for line in json_content.strip().splitlines()][0]
+    return json_dict
+
+def get_multiple_jsons(s3_client, bucket_name, catalog, schema, md5_ids):
+    json_results = []
+    
+    for md5_id in md5_ids:
+        try:
+            json_data = get_json_from_s3(s3_client, bucket_name, catalog, schema, md5_id)
+            json_results.append(json_data)
+        except Exception as e:
+            print(f"Error processing md5_id={md5_id}: {e}")
+            json_results.append({})
+    
+    return json_results
 
 def query(texts: List[str]) -> List[List[float]]:
     """
@@ -68,23 +118,30 @@ def knn_pinecone(question: str, k: int):
         return query_results
     except Exception as e:
         raise RuntimeError(f"Failed to query the index: {e}")
+    
+
+def search_pinecone(question, k = 10):
+
+    results = knn_pinecone(question, k)
+    id_list: list= [results["matches"][i]['id'] for i in range(k)]
+    return id_list
+
 
 
 st.markdown("## Embedding Search")
 
 title = st.text_input("🔍 Search News:")
 if title:
-    st.write("Results for:", title)
+    # st.write("Results for:", title)
 
-    # Realizar la búsqueda utilizando la función existente `knn_pinecone`
-    k = 10  # Número de vecinos más cercanos a recuperar
-    results = knn_pinecone(title, k)
+    md5_ids: list = search_pinecone(title)
+    json_data_list: list = get_multiple_jsons(s3_client, bucket_name, catalog, schema, md5_ids)  # keys: (title, content, url)
 
-    # Mostrar los resultados
-    if results and "matches" in results and results["matches"]:
-        for i in range(
-            min(k, len(results["matches"]))
-        ):  # Verifica el número de resultados
-            st.write(f"Result {i+1}: {results['matches'][i]['id']}")
+    if json_data_list:
+        for data in json_data_list:
+            st.markdown(f"### {data['title']}")
+            # st.markdown(f"{data['content'][0:200]}") # TODO: usar la api de openai para los resumenes
+            st.markdown(f"[Read more]({data['url']})")
+            st.markdown("---")  # Línea divisoria entre resultados
     else:
         st.write("No results found.")
