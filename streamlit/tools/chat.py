@@ -5,6 +5,9 @@ import uuid
 import logging
 import os
 from dotenv import load_dotenv
+import time
+
+from streamlit.delta_generator import DeltaGenerator
 
 # Cargar las variables de entorno
 load_dotenv()
@@ -86,7 +89,7 @@ user_input = st.chat_input("What is up?")
 # Mostrar sugerencias si no se ha seleccionado una
 
 if not st.session_state.suggestion_selected:
-    suggestion_box = st.empty()
+    suggestion_box: DeltaGenerator = st.empty()
     # Lista de sugerencias
     suggested_prompts = [
         "Monitor travel restrictions for Brazil related to monkeypox outbreaks and provide information on any potential risks and potential impact in insurance policies.",
@@ -101,6 +104,11 @@ if not st.session_state.suggestion_selected:
                 user_input = prompt
                 # st.session_state.messages.append({"role": "user", "content": user_input})
                 # st.session_state.suggestion_selected = True
+
+def stream_data(response: str):
+    for word in response.split(" "):
+        yield word + " "
+        time.sleep(0.1)
 
 
 # Procesar la entrada del usuario
@@ -127,11 +135,12 @@ if user_input:
             full_response = ""
             for chunk in invokeAgent(user_input):
                 full_response += chunk
-                response_placeholder.markdown(full_response, unsafe_allow_html=True)
                 # Opcionalmente, actualizar el estado con la respuesta parcial
                 st.session_state.messages.append(
-                    {"role": "assistant", "content": full_response}
-                )
+                    {"role": "assistant", "content": full_response})
 
             # Limpiar el texto de carga después de recibir la respuesta completa
             loading_text.empty()
+        response_placeholder.write_stream(stream_data(full_response))
+
+
