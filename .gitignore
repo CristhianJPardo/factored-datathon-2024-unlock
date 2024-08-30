@@ -17,3 +17,7 @@ ml-pipeline-tools/__pycache__
 ml-pipeline-tools/data1
 .DS_Store
 config.share
+
+ml-pipeline-tools/json_cleaner_and_converter.py
+ml-pipeline-tools/data_clean.ipynb
+ml-pipeline-tools/delta_lake.py
