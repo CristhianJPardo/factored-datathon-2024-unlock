@@ -46,9 +46,8 @@ def fetch_data(schema, table_name):
 
 
 # Fetch data
-# events = fetch_data("silver", "events")
-# chart_data = events[['actiongeo_lat', 'actiongeo_long']].dropna()
-# print(chart_data.head())
+chart_data = fetch_data("gold", "geo_filtered")
+
 
 ## Page for usage cases and visualization
 # st.set_page_config(page_title="Travel Insights Dashboard", layout="wide")
@@ -127,18 +126,15 @@ st.divider()
 
 # Visualization
 st.header("Visualization")
-chart_data = pd.DataFrame(
-    np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],
-    columns=["lat", "lon"],
-)
-
+chart_data= chart_data.astype(float)
+print(chart_data.info())
 st.pydeck_chart(
     pdk.Deck(
-        map_style="mapbox://styles/mapbox/light-v9",
+        map_style=None,
         initial_view_state=pdk.ViewState(
-            latitude=37.76,
-            longitude=-122.4,
-            zoom=11,
+            latitude=4.57,
+            longitude=-74.2973,
+            zoom=5,
             pitch=50,
         ),
         layers=[
@@ -147,7 +143,7 @@ st.pydeck_chart(
                 data=chart_data,
                 get_position="[lon, lat]",
                 radius=200,
-                elevation_scale=4,
+                elevation_scale=100,
                 elevation_range=[0, 1000],
                 pickable=True,
                 extruded=True,
