@@ -44,6 +44,19 @@ s3_client = boto3.client(
     region_name=AWS_REGION 
 )
 
+def summarize_content(content):
+    response = openai.chat.completions.create(
+        model="gpt-4o-mini",  # Puedes usar "gpt-4" si tienes acceso
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant that summarizes news articles."},
+            {"role": "user", "content": f"Please summarize the following content:\n\n{content}"}
+        ],
+        max_tokens=100,  # Ajusta el número de tokens para controlar la longitud del resumen
+        temperature=0.7
+    )
+    summary = response.choices[0].message.content
+    return summary
+
 def get_json_from_s3(s3_client, bucket_name, catalog, schema, md5_id):
     
     prefix = f"{catalog}/{schema}/scraped_json/md5_id={md5_id}/"
@@ -139,7 +152,12 @@ if title:
 
     if json_data_list:
         for data in json_data_list:
+            # Generar un resumen del contenido
+            summary = summarize_content(data['content'][0:500])
+
+
             st.markdown(f"### {data['title']}")
+            st.markdown(f"{summary}")
             # st.markdown(f"{data['content'][0:200]}") # TODO: usar la api de openai para los resumenes
             st.markdown(f"[Read more]({data['url']})")
             st.markdown("---")  # Línea divisoria entre resultados
