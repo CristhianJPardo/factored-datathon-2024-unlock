@@ -16,3 +16,4 @@ ml-pipeline-tools/__pycache__
 *.json
 ml-pipeline-tools/data1
 .DS_Store
+config.share
