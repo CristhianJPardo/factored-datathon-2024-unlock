@@ -34,28 +34,27 @@ We've utilized cutting-edge technologies to build this data solution:
 
 Our project is organized into the following directories:
 
-- **data-engineering** 🚀
+- **[Amazon Bedrock-agent](https://github.com/CristhianJPardo/factored-datathon-2024-unlock/tree/main/bedrock/README.md)** 👥
+  -   This folder contains an Amazon Bedrock Agent designed to assess the impact of monkeypox on the insurance industry and policy pricing. Additionally, it includes an in-memory Pinecone database and Bing API integration.
+- **[data-engineering](https://github.com/CristhianJPardo/factored-datathon-2024-unlock/tree/main/data-engineering/README.md)** 🚀
   - This directory contains the scripts and tools used for processing and transforming data, forming the backbone of our data pipeline.
   
-- **ml-pipeline-tools** 🤖
-  - Here you'll find notebooks and scripts dedicated to machine learning models, data analysis, and other exploratory tasks related to our machine learning pipeline.
+- **[ml-pipeline-tools](https://github.com/CristhianJPardo/factored-datathon-2024-unlock/blob/main/ml-pipeline-tools/README.md)** 🤖
+  - Here you'll find the embeddings generator and the Pinecone database, which manage the entire machine learning (ML) pipeline.
   
 - **web-scrapping** 🌐
   - This directory houses the code responsible for extracting and gathering data from various web sources, crucial for feeding our data pipeline and ML models.
 
-## Features ✨
-
-
-## The best 🌟
-
+- **streamlit-deployment** 🚀  
+  - This directory contains the files needed to deploy our application using Streamlit. It sets up an interactive web interface that allows users to easily interact with the application through a browser. Streamlit handles the display of data and functionalities in an accessible way, facilitating user interaction.
 
 
 ## Contributing
 
 Feel free to reach out to any of our team members for more information:
 
-- Daniel Melo: 
-- Juan Pablo Mendez:
+- Daniel Melo: [LinkedIn](https://www.linkedin.com/in/daniel-melo-09aa82325/)
+- Juan Pablo Mendez: [LinkedIn](https://www.linkedin.com/in/juan-pablo-gomez-mendez/)
 - Eduards Mendez: [LinkedIn](https://www.linkedin.com/in/eduards-alexis-mendez-chipatecua-8584b21b4/)
 - Cristhian Pardo: [LinkedIn](https://www.linkedin.com/in/cristhian-pardo/)
   
