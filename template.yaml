@@ -64,6 +64,8 @@ Resources:
         Variables:
           MEDALLION_BUCKET_NAME: !Sub '${ResourcePrefix}-medallion-bucket'
           BING_API_KEY: "52ad137a34914cbdae02963870815ffd"
+          # OPENAI_API_KEY: "52ad137a34914cbdae02963870815ffd"
+          # PINECONE_API_KEY: "52ad137a34914cbdae02963870815ffd"
       FunctionName: !Sub '${ResourcePrefix}-bedrock-lambda'
       Policies:
         - S3ReadPolicy:
