@@ -98,6 +98,8 @@ if not st.session_state.suggestion_selected:
         "Analyze public perception regarding tourism in Colombia, based on recent news articles, and provide insights into potential risks that might affect travel insurance.",
         "Validate the credibility of the statement: 'The monkeypox outbreak in Venezuela has led to a 50% increase in travel insurance premiums.'",
         "Search for news articles about the impact of monkeypox on international travel and provide a summary of the most relevant articles.",
+        "Who are you?",
+        "What can you do?"
     ]
     with suggestion_box.container():
         st.markdown("#### Try these prompts...")
